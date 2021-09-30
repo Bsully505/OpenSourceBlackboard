@@ -33,8 +33,8 @@ class mainApp(tk.Frame):
 
 
 if __name__ == "__main__":
-    root = tk.Tk();
-    inputText = tk.Text(root, height = 5, width = 20)
+    root = tk.Tk()
+    inputText = tk.Text(root, height = 2, width = 20)
     inputText.pack()
     label = tk.Label(root, text="Hello World", padx=10, pady=10)
     my_gui =  mainApp(root)
