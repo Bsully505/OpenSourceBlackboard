@@ -1,44 +1,83 @@
 import tkinter as tk
+from tkinter import ttk
 import requests
+#import LoginPage
+from LoginPage import LoginPage
+from LoggedInAPITester import LoggedInAPITester
 
 
-class mainApp(tk.Frame):
 
-    def __init__(self, parent, *args, **kwargs):
-        tk.Frame.__init__(self, parent, *args, **kwargs)
-        self.parent = parent
-        parent.title("Test GUI")
 
-        self.label = tk.Label(parent, text="This is a test GUI")
-        self.label.pack()
+class mainApp(tk.Tk):
+        global username
+        global password
+        global header
 
-        self.hello_button = tk.Button(parent, text="PrintHelloWorld", command=self.helloTest)
-        self.hello_button.pack()
 
-        self.printButton = tk.Button(parent, text = "Print Text Input", command =self.printResponseForCourseInfo)
-        self.printButton.pack()
 
-        self.close_button = tk.Button(parent, text="Close", command=parent.quit)
-        self.close_button.pack()
+        def __init__(self, *args, **kwargs):
 
-    def helloTest(self):
-        print("Hello World!")
 
-    def printResponseForCourseInfo(self):
-        #example course id is _90767_1 this is for procedural generation
-        input = inputText.get(1.0, "end-1c")
-        url = "https://quinnipiac.blackboard.com/learn/api/public/v1/courses/"+input+"/contents"
-        response = requests.request("GET",url)
-        print(response.json())
+            tk.Tk.__init__(self, *args, **kwargs)
+            container = tk.Frame(self)
+            container.pack(side = "top", fill = "both", expand = True)
+            self.geometry('200x150')
+            container.grid_rowconfigure(0, weight = 1)
+            container.grid_columnconfigure(0, weight = 1)
+
+            self.frames = {}
+
+            for F in (LoginPage,LoggedInAPITester):
+                page_name = F.__name__
+                print(page_name)
+                frame = F(container, self)
+                self.frames[page_name] = frame
+                frame.grid(row = 0, column = 0, sticky = "nsew")
+
+
+            self.ChangeFrame("LoginPage")
+
+        def ValidateLogin(self,Username, Password):
+            print("Validates Login")
+            username = Username
+            password = Password
+            self.ChangeFrame("LoggedInAPITester")
+
+
+
+        def ChangeFrame(self,page):
+            try:
+                frame = self.frames[page]
+                self.title(eval(page))
+                frame.tkraise()
+            except OSError:
+                print("Error")
+
+
+
+
+        def inportHeader(self):
+            #example course id is _90767_1 this is for procedural generation
+            input = inputText.get(1.0, "end-1c")
+            url = "https://quinnipiac.blackboard.com/learn/api/public/v1/courses/"+input+"/contents"
+            response = requests.request("GET",url)
+
+            print(response.json())
+
+
+
+
+
+        def printResponseForCourseInfo(self):
+            #example course id is _90767_1 this is for procedural generation
+            input = inputText.get(1.0, "end-1c")
+            url = "https://quinnipiac.blackboard.com/learn/api/public/v1/courses/"+input+"/contents"
+            response = requests.request("GET",url)
+
+            print(response.json())
+
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    inputText = tk.Text(root, height = 2, width = 20)
-    inputText.pack()
-    label = tk.Label(root, text="Hello World", padx=10, pady=10)
-    my_gui =  mainApp(root)
-    root.mainloop()
-
-
-
+    app = mainApp()
+    app.mainloop()
