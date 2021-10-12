@@ -86,7 +86,7 @@ class mainApp(tk.Tk):
 
         def printResponseForCourseInfo(self):
             #example course id is _90767_1 this is for procedural generation
-            input = inputText.get(1.0, "end-1c")
+            #input = inputText.get(1.0, "end-1c")
             url = "https://quinnipiac.blackboard.com/learn/api/public/v1/courses/"+input+"/contents"
             response = requests.request("GET",url)
 
