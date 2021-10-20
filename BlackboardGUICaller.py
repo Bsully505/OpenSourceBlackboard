@@ -30,7 +30,7 @@ class mainApp(tk.Tk):
         courses = []
         preUrl = 'https://quinnipiac.blackboard.com/'
         header = {
-        'Cookie': 'JSESSIONID=3861BEAEB4D7A84336F6037C1B18FA36; COOKIE_CONSENT_ACCEPTED=true; BbClientCalenderTimeZone=America/New_York; web_client_cache_guid=2e2c6e9c-1a2b-4870-887c-f3f8fd8fff9b; JSESSIONID=863D1219E798EB42FFEFFF9447579314; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A3C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A3C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; BbRouter=expires:1634675527,id:E3150EE5084E68240A219EE32C5D627E,signature:316fb97ce46fe6ae0bf118f6e6fd0b81ab4f79251fedb3b265381d31d4c5283e,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:6ce6db0ef8e24509a7c1abf1e60b3845,v:2,xsrf:f71cdf56-21bc-431e-816a-cfe4c6186591'
+        'Cookie': 'JSESSIONID=5920E6AB77AAE6A7F7F8D65F6F941CEA; BbClientCalenderTimeZone=America/New_York; web_client_cache_guid=0fd5b16b-78bc-45d9-8faa-ccf10d77304f; COOKIE_CONSENT_ACCEPTED=true; JSESSIONID=88B6279BA70A1672BB675D99BF83F60B; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED99208A7AE0BA845CCE05C9AA0AF618C176F03C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED99208A7AE0BA845CCE05C9AA0AF618C176F03C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; BbRouter=expires:1634771083,id:2E58239C3B6241A2D1182BABFDA59B31,signature:822fada71b91a874ea8c29ebe4a8683160e198b38cec6174b2592a0fd71b8533,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:cff58183d5a742ad9d5c0d751bc05a16,v:2,xsrf:2f576c06-234b-4e92-a142-fa8c9b02157b'
         }
 
 
@@ -54,18 +54,19 @@ class mainApp(tk.Tk):
                 frame.grid(row = 0, column = 0, sticky = "nsew")
 
             #self.ValidateLogin('cjflannery', 'FakePassword123') this was to test if when using the token from bcsullivan can i access someone elses account does not work
-            self.ValidateLogin('ctmcneill', 'FakePassword123')
+            self.ValidateLogin('bcsullivan', 'FakePassword123')
             self.ChangeFrame("LoginPage")
-
+        #very important function it gets the username to get the userid(the way that blackboard tracks students(student primary key)) and then basically starts the program
         def ValidateLogin(self,Username, Password):
             
             username = Username
             password = Password
             self.userID = self.getUserId(username)
-            self.printResponseForCourseInfo()
-            self.printoutCourseIDs()
+            self.SetCourseIDInfo()
+            #self.printoutCourseIDs()
+            #self.PrintCourseNamesWithIds()
             self.ChangeFrame("LoggedInAPITester")
-            self.printoutAnnouncements()
+            self.printoutAnnouncements('_90503_1')
 
 
 
@@ -92,7 +93,7 @@ class mainApp(tk.Tk):
             response = requests.request("GET",url,headers= self.header)
             return response.json()['results'][0]['id']
 
-        def printResponseForCourseInfo(self):
+        def SetCourseIDInfo(self):
             url = "https://quinnipiac.blackboard.com/learn/api/public/v1/users/"+self.userID+"/courses"
             response = requests.request("GET",url, headers = self.header)
             #prints out the courses that the student is enrolled in 
@@ -112,8 +113,18 @@ class mainApp(tk.Tk):
             for i in self.courses:
                 print(i)
 
-        def printoutAnnouncements(self):
-            url = self.preUrl + '/learn/api/public/v1/courses/_90503_1/announcements'
+
+        def PrintCourseNames(self):
+            for i in self.courses:
+                print(self.printoutCourseNameIndividual(i))
+
+        def PrintCourseNamesWithIds(self):
+            for i in self.courses:
+                print(self.printoutCourseNameIndividual(i))
+                print(i)
+
+        def printoutAnnouncements(self,CourseID):
+            url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/announcements'
             response = requests.request("GET", url, headers = self.header)
             #print(response.json()['name'] + " it worked!")
             for res in response.json()['results']:
