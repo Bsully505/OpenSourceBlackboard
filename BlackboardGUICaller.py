@@ -30,7 +30,7 @@ class mainApp(tk.Tk):
         courses = []
         preUrl = 'https://quinnipiac.blackboard.com/'
         header = {
-        'Cookie': 'JSESSIONID=5920E6AB77AAE6A7F7F8D65F6F941CEA; BbClientCalenderTimeZone=America/New_York; web_client_cache_guid=0fd5b16b-78bc-45d9-8faa-ccf10d77304f; COOKIE_CONSENT_ACCEPTED=true; JSESSIONID=88B6279BA70A1672BB675D99BF83F60B; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED99208A7AE0BA845CCE05C9AA0AF618C176F03C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED99208A7AE0BA845CCE05C9AA0AF618C176F03C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; BbRouter=expires:1634771083,id:2E58239C3B6241A2D1182BABFDA59B31,signature:822fada71b91a874ea8c29ebe4a8683160e198b38cec6174b2592a0fd71b8533,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:cff58183d5a742ad9d5c0d751bc05a16,v:2,xsrf:2f576c06-234b-4e92-a142-fa8c9b02157b'
+        'Cookie': 'JSESSIONID=F0F905D2F62E1C93F69EA1F0C340A1B6; COOKIE_CONSENT_ACCEPTED=true; BbClientCalenderTimeZone=America/New_York; JSESSIONID=22DB622680935BFCC6763BA2929D98C2; web_client_cache_guid=6143ed4d-01d7-429e-b57d-5a2c007571fe; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A3C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A3C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; BbRouter=expires:1635280872,id:371E05BA102BB22C1910ED4AD4087809,signature:c28558247460fbf78cefee6c6c08efddd96723650b86015d22d3398932fe6d4f,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:6ce6db0ef8e24509a7c1abf1e60b3845,v:2,xsrf:72ebc49a-d88f-4085-b705-65646f0f84f9'
         }
 
 
@@ -54,7 +54,7 @@ class mainApp(tk.Tk):
                 frame.grid(row = 0, column = 0, sticky = "nsew")
 
             #self.ValidateLogin('cjflannery', 'FakePassword123') this was to test if when using the token from bcsullivan can i access someone elses account does not work
-            self.ValidateLogin('bcsullivan', 'FakePassword123')
+            self.ValidateLogin('ctmcneill', 'FakePassword123')
             self.ChangeFrame("LoginPage")
         #very important function it gets the username to get the userid(the way that blackboard tracks students(student primary key)) and then basically starts the program
         def ValidateLogin(self,Username, Password):
@@ -67,6 +67,7 @@ class mainApp(tk.Tk):
             #self.PrintCourseNamesWithIds()
             self.ChangeFrame("LoggedInAPITester")
             self.printoutAnnouncements('_90503_1')
+            self.printoutGrades('_90503_1')
 
 
 
@@ -131,7 +132,14 @@ class mainApp(tk.Tk):
                 #print(res)
                 print(res['title'])
                 print(res['body'])
-
+        
+        def printoutGrades(self, CourseID):
+            url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/columns'
+            response = requests.request("GET", url, headers = self.header)
+            for res in response.json()['results']:
+                #print(res)
+                print(res['name'])
+                print(res['score'])
 
 
 if __name__ == "__main__":

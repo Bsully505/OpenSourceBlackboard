@@ -4,7 +4,7 @@ from tkinter import ttk
 #this class
 #thinking of turning this into a list of courses that the student is taking 
 
-class LoggedInAPITester(tk.Frame):
+class InCourse(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
