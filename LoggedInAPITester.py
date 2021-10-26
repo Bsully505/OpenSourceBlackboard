@@ -12,7 +12,7 @@ class LoggedInAPITester(tk.Frame):
         labelCourses = ttk.Label(self, text = "Get list of courses")
         buttonCourses = tk.Button(self, text = "Courses", command = lambda:controller.PrintCourseNames())
         labelGrades = ttk.Label(self, text = "Get list of grades")
-        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.printoutGrades())
+        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.PrintCourseNames())
         labelAnnouncements = ttk.Label(self, text = "Get list of announcements")
         buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.PrintCourseNames())
         labelUpcoming = ttk.Label(self, text = "Get list of upcoming assignments")

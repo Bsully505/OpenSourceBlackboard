@@ -68,6 +68,7 @@ class mainApp(tk.Tk):
             self.ChangeFrame("LoggedInAPITester")
             self.printoutAnnouncements('_90503_1')
             self.printoutGrades('_90503_1')
+            self.printoutAssignments()
 
 
 
@@ -140,6 +141,14 @@ class mainApp(tk.Tk):
                 #print(res)
                 print(res['name'])
                 print(res['score'])
+
+        def printoutAssignments(self):
+            url = self.preUrl + '/learn/api/public/v1/calendars/items'
+            response = requests.request("GET", url, headers = self.header)
+            for res in response.json()['results']:
+                #print(res)
+                print(res['title'])
+                print(res['end'])
 
 
 if __name__ == "__main__":
