@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 import requests
-#import LoginPage
+from InCourse import InCourse
 from LoginPage import LoginPage
 from LoggedInAPITester import LoggedInAPITester
 import json
 
-
+#Bryans UserID = _74932_1
 #the question that I(Bryan) have is how to get the courses faster
 #the answer is to use a different api call which is in the course meembership folder
 
@@ -17,12 +17,20 @@ import json
 
 #problem that occurs 
 #which courses should This app be interested in 
+## this is fixed by checking all of the courses the student enrlled in and checking if they are of this semester by checking the externalID and if it contains, for this semester, 21FA
 
 #things that Bryan has found out 
 #when getting api calls and from json the way to acess the results is doing 
 #for  val in response.json()['results'][0] and this will run a for loop on all outputs
 #only the session id users courses can be accessed all others are 404 unauth
 
+
+
+###
+#My Plan is when creating the LoggedInAPITester frame to insert the couseName, CourseID as a string and able to split with regex of ","
+
+
+###
 class mainApp(tk.Tk):
         global username
         global password
@@ -30,32 +38,43 @@ class mainApp(tk.Tk):
         courses = []
         preUrl = 'https://quinnipiac.blackboard.com/'
         header = {
-        'Cookie': 'JSESSIONID=F0F905D2F62E1C93F69EA1F0C340A1B6; COOKIE_CONSENT_ACCEPTED=true; BbClientCalenderTimeZone=America/New_York; JSESSIONID=22DB622680935BFCC6763BA2929D98C2; web_client_cache_guid=6143ed4d-01d7-429e-b57d-5a2c007571fe; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A3C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A3C12E3FB3F56CA8A62BEA365FD369A677D7A1DDDCFCE04BDBD33143BAEBB05A1; BbRouter=expires:1635280872,id:371E05BA102BB22C1910ED4AD4087809,signature:c28558247460fbf78cefee6c6c08efddd96723650b86015d22d3398932fe6d4f,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:6ce6db0ef8e24509a7c1abf1e60b3845,v:2,xsrf:72ebc49a-d88f-4085-b705-65646f0f84f9'
+        'Cookie': 'JSESSIONID=22D1227EB55A58ECF15A0D3171DEFEAF; BbClientCalenderTimeZone=America/New_York; web_client_cache_guid=2f5ecba6-3258-4b3d-977a-ecae91e35061; COOKIE_CONSENT_ACCEPTED=true; OptanonConsent=isIABGlobal=false&datestamp=Tue+Oct+26+2021+19:05:09+GMT-0400+(Eastern+Daylight+Time)&version=6.19.0&hosts=&consentId=e2b8dab3-930c-4d53-bb83-3fb8ac49b4f7&interactionCount=1&landingPath=https://www.blackboard.com/&groups=C0001:1,C0003:1,BG1:1,C0002:1,C0005:1,C0004:1; JSESSIONID=C5C8A03B21444B09DEE32D57675E3816; BbRouter=expires:1635313943,id:D9408C6B115D1A34A7F8F7DA9C70334F,signature:8c4ea2f61c7aab7b3839afd8206c8047f9b12589a841194e09b4e0bdb2d9fa20,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:cff58183d5a742ad9d5c0d751bc05a16,v:2,xsrf:1a03781e-4692-4ef5-a8be-2f3463506426; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A6B32BF6DD3D862C1CD713BC0C9D816EACFBD71EF3251F933A12E1A0B164E8378; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A6B32BF6DD3D862C1CD713BC0C9D816EACFBD71EF3251F933A12E1A0B164E8378'
         }
 
-
+        global container
 
         def __init__(self, *args, **kwargs):
 
             
             tk.Tk.__init__(self, *args, **kwargs)
-            container = tk.Frame(self)
-            container.pack(side = "top", fill = "both", expand = True)
+            self.container = tk.Frame(self)
+            self.container.pack(side = "top", fill = "both", expand = True)
             self.geometry('200x150')
-            container.grid_rowconfigure(0, weight = 1)
-            container.grid_columnconfigure(0, weight = 1)
+            self.container.grid_rowconfigure(0, weight = 1)
+            self.container.grid_columnconfigure(0, weight = 1)
 
             self.frames = {}
-            #create the main panels for the tkinter
-            for F in (LoginPage,LoggedInAPITester):
-                page_name = F.__name__
-                frame = F(container, self)
-                self.frames[page_name] = frame
-                frame.grid(row = 0, column = 0, sticky = "nsew")
-
-            #self.ValidateLogin('cjflannery', 'FakePassword123') this was to test if when using the token from bcsullivan can i access someone elses account does not work
-            self.ValidateLogin('ctmcneill', 'FakePassword123')
+            page_name = LoginPage.__name__
+            frame = LoginPage(self.container, self)
+            self.frames[page_name] = frame
+            frame.grid(row = 0, column = 0, sticky = "nsew")
             self.ChangeFrame("LoginPage")
+
+        def addCourseFrame(self, fName,courseID):
+            page_name = fName
+            frame = InCourse(self.container, self,courseID)
+            self.frames[page_name] = frame
+            frame.grid(row = 0, column = 0, sticky = "nsew")
+            self.ChangeFrame(fName)
+
+        def AddCourseFrame(self,userID):
+            page_name = LoggedInAPITester.__name__
+            frame = LoggedInAPITester(self.container, self,self.userID)
+            self.frames[page_name] = frame
+            print("UserID: "+ self.userID)
+            frame.grid(row = 0, column = 0, sticky = "nsew")
+
+
         #very important function it gets the username to get the userid(the way that blackboard tracks students(student primary key)) and then basically starts the program
         def ValidateLogin(self,Username, Password):
             
@@ -63,12 +82,14 @@ class mainApp(tk.Tk):
             password = Password
             self.userID = self.getUserId(username)
             self.SetCourseIDInfo()
+            self.AddCourseFrame(self.userID)
             #self.printoutCourseIDs()
             #self.PrintCourseNamesWithIds()
             self.ChangeFrame("LoggedInAPITester")
-            self.printoutAnnouncements('_90503_1')
-            self.printoutGrades('_90503_1')
-            self.printoutAssignments()
+            #self.printoutAnnouncements('_90503_1')
+            #self.printoutGrades('_90503_1')
+            #self.printoutAssignments()
+            self.getCoursesForThisSemester()
 
 
 
@@ -93,6 +114,7 @@ class mainApp(tk.Tk):
         def getUserId(self,username):
             url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users?userName='+username
             response = requests.request("GET",url,headers= self.header)
+            print(response.json())
             return response.json()['results'][0]['id']
 
         def SetCourseIDInfo(self):
@@ -115,7 +137,7 @@ class mainApp(tk.Tk):
             for i in self.courses:
                 print(i)
 
-
+        #Do not use this function it applies to every single class the student has enrolled in 
         def PrintCourseNames(self):
             for i in self.courses:
                 print(self.printoutCourseNameIndividual(i))
@@ -130,7 +152,6 @@ class mainApp(tk.Tk):
             response = requests.request("GET", url, headers = self.header)
             #print(response.json()['name'] + " it worked!")
             for res in response.json()['results']:
-                #print(res)
                 print(res['title'])
                 print(res['body'])
         
@@ -149,6 +170,56 @@ class mainApp(tk.Tk):
                 #print(res)
                 print(res['title'])
                 print(res['end'])
+
+        def getCoursesForThisSemester(self):
+            courses = []
+            url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users/'+self.userID+'/courses?sort=lastAccessed(desc)&fields=courseId,course.externalId,course.name'
+            response = requests.request("GET",url,headers = self.header)
+            res = response.json()
+            for val in res['results']:
+                result = val['course']['externalId'].split('_')
+                if(('21FA') in result[len(result)-1] ):
+                    courses.append(result[0])
+                    print(result[0])
+               
+        def getCourseIdsForThisSemester(self):
+            courses = []
+            url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users/'+self.userID+'/courses?sort=lastAccessed(desc)&fields=courseId,course.externalId,course.name'
+            response = requests.request("GET",url,headers = self.header)
+            res = response.json()
+            for val in res['results']:
+                result = val['course']['externalId'].split('_')
+                if(('21FA') in result[len(result)-1] ):
+                    courses.append(val['courseId'])
+                    print(val['courseId'])
+            return courses
+
+        def getCourseIdsForThisSemester(self,userID):
+            courses = []
+            url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users/'+userID+'/courses?sort=lastAccessed(desc)&fields=courseId,course.externalId'
+            response = requests.request("GET",url,headers = self.header)
+            res = response.json()
+            for val in res['results']:
+                result = val['course']['externalId'].split('_')
+                if(('21FA') in result[len(result)-1] ):
+                    courses.append(val['courseId'])
+                    print(val['courseId'])
+            return courses
+
+        def getCourseIdsandNamesForThisSemester(self,userID):
+            courses = []
+            url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users/'+userID+'/courses?sort=lastAccessed(desc)&fields=courseId,course.externalId,course.name'
+            response = requests.request("GET",url,headers = self.header)
+            res = response.json()
+            for val in res['results']:
+                result = val['course']['externalId'].split('_')
+                if(('21FA') in result[len(result)-1] ):
+                    courses.append(val['courseId']+','+val['course']['name'])
+                    print(val['courseId'])
+            return courses
+
+        def getUserID(self):
+            return self.userID
 
 
 if __name__ == "__main__":

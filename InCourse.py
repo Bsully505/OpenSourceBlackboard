@@ -5,16 +5,18 @@ from tkinter import ttk
 #thinking of turning this into a list of courses that the student is taking 
 
 class InCourse(tk.Frame):
-    def __init__(self, parent, controller):
+    global CourseID
+    def __init__(self, parent, controller,CourseID):
         tk.Frame.__init__(self, parent)
-
+        self.CourseID = CourseID
         controller.geometry('250x450')
+        tk.Button(self,text = "Back",command=lambda:controller.ChangeFrame("LoggedInAPITester")).pack()
         labelCourses = ttk.Label(self, text = "Get list of courses")
         buttonCourses = tk.Button(self, text = "Courses", command = lambda:controller.PrintCourseNames())
         labelGrades = ttk.Label(self, text = "Get list of grades")
-        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.printoutGrades('_90503_1'))
+        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.printoutGrades(self.CourseID))
         labelAnnouncements = ttk.Label(self, text = "Get list of announcements")
-        buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.printoutAnnouncements('_90503_1'))
+        buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.printoutAnnouncements(self.CourseID))
         labelUpcoming = ttk.Label(self, text = "Get list of upcoming assignments")
         buttonUpcoming = tk.Button(self, text = "Upcoming Assignments", command = lambda:controller.printoutAssignments())
         labelCourses.pack()
