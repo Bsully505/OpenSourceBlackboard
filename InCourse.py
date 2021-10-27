@@ -6,13 +6,13 @@ from tkinter import ttk
 
 class InCourse(tk.Frame):
     global CourseID
-    def __init__(self, parent, controller,CourseID):
+    def __init__(self, parent, controller,CourseID,userID):
         tk.Frame.__init__(self, parent)
         self.CourseID = CourseID
         controller.geometry('250x450')
         tk.Button(self,text = "Back",command=lambda:controller.ChangeFrame("LoggedInAPITester")).pack()
         labelCourses = ttk.Label(self, text = "Get list of courses")
-        buttonCourses = tk.Button(self, text = "Courses", command = lambda:controller.PrintCourseNames())
+        buttonCourses = tk.Button(self, text = "Courses", command = lambda:controller.getCourseIdsForThisSemester(userID))
         labelGrades = ttk.Label(self, text = "Get list of grades")
         buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.printoutGrades(self.CourseID))
         labelAnnouncements = ttk.Label(self, text = "Get list of announcements")

@@ -14,8 +14,9 @@ class LoggedInAPITester(tk.Frame):
       
         for i in courses:
             print(i)
-            ttk.Button(self,text = i.split(",")[1],command= lambda:controller.addCourseFrame(i.split(",")[1],i.split(",")[0])).pack()
-
+            butt=ttk.Button(self,text = i.split(",")[1],command= lambda i=i:controller.ChangeFrame(i.split(",")[1]))
+            controller.addCourseFrame(i.split(",")[1],i.split(",")[0],self.UserID)
+            butt.pack()
     
         #ideas is to be able be logged in and call an api using buttons 
         

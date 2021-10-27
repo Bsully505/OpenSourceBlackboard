@@ -38,7 +38,7 @@ class mainApp(tk.Tk):
         courses = []
         preUrl = 'https://quinnipiac.blackboard.com/'
         header = {
-        'Cookie': 'JSESSIONID=22D1227EB55A58ECF15A0D3171DEFEAF; BbClientCalenderTimeZone=America/New_York; web_client_cache_guid=2f5ecba6-3258-4b3d-977a-ecae91e35061; COOKIE_CONSENT_ACCEPTED=true; OptanonConsent=isIABGlobal=false&datestamp=Tue+Oct+26+2021+19:05:09+GMT-0400+(Eastern+Daylight+Time)&version=6.19.0&hosts=&consentId=e2b8dab3-930c-4d53-bb83-3fb8ac49b4f7&interactionCount=1&landingPath=https://www.blackboard.com/&groups=C0001:1,C0003:1,BG1:1,C0002:1,C0005:1,C0004:1; JSESSIONID=C5C8A03B21444B09DEE32D57675E3816; BbRouter=expires:1635313943,id:D9408C6B115D1A34A7F8F7DA9C70334F,signature:8c4ea2f61c7aab7b3839afd8206c8047f9b12589a841194e09b4e0bdb2d9fa20,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:cff58183d5a742ad9d5c0d751bc05a16,v:2,xsrf:1a03781e-4692-4ef5-a8be-2f3463506426; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A6B32BF6DD3D862C1CD713BC0C9D816EACFBD71EF3251F933A12E1A0B164E8378; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A6B32BF6DD3D862C1CD713BC0C9D816EACFBD71EF3251F933A12E1A0B164E8378'
+        'Cookie': 'JSESSIONID=C5CCB4C19F8A8CCFABC47E1141B69483; BbClientCalenderTimeZone=America/New_York; web_client_cache_guid=2f5ecba6-3258-4b3d-977a-ecae91e35061; COOKIE_CONSENT_ACCEPTED=true; OptanonConsent=isIABGlobal=false&datestamp=Tue+Oct+26+2021+19:05:09+GMT-0400+(Eastern+Daylight+Time)&version=6.19.0&hosts=&consentId=e2b8dab3-930c-4d53-bb83-3fb8ac49b4f7&interactionCount=1&landingPath=https://www.blackboard.com/&groups=C0001:1,C0003:1,BG1:1,C0002:1,C0005:1,C0004:1; JSESSIONID=9E8E157C05C212F822725DC3C339E355; AWSELB=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A6B32BF6DD3D862C1CD713BC0C9D816EACFBD71EF3251F933A12E1A0B164E8378; AWSELBCORS=6FBB59590AD55E4479C8D5228AC967BB0DA2ED9920FD0104AE518E1D40FACC426803F95C7A6B32BF6DD3D862C1CD713BC0C9D816EACFBD71EF3251F933A12E1A0B164E8378; BbRouter=expires:1635362107,id:6E894BCCD3395AC415DD7844F22A014D,signature:0dffc766c87a953d444f9c98a98963ecd725d00ffebbd81f86d4df114f531f5f,site:2bf58a57-0609-4ded-b883-0cffff2406fd,timeout:10800,user:cff58183d5a742ad9d5c0d751bc05a16,v:2,xsrf:645fa85d-2af0-411a-b645-10340a6f32b7'
         }
 
         global container
@@ -60,9 +60,9 @@ class mainApp(tk.Tk):
             frame.grid(row = 0, column = 0, sticky = "nsew")
             self.ChangeFrame("LoginPage")
 
-        def addCourseFrame(self, fName,courseID):
+        def addCourseFrame(self, fName,courseID,userID):
             page_name = fName
-            frame = InCourse(self.container, self,courseID)
+            frame = InCourse(self.container, self,courseID,self.userID)
             self.frames[page_name] = frame
             frame.grid(row = 0, column = 0, sticky = "nsew")
             self.ChangeFrame(fName)
