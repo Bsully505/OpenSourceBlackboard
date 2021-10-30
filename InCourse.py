@@ -17,16 +17,14 @@ class InCourse(tk.Frame):
         buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.printoutGrades(self.CourseID))
         labelAnnouncements = ttk.Label(self, text = "Get list of announcements")
         buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.printoutAnnouncements(self.CourseID))
-        labelUpcoming = ttk.Label(self, text = "Get list of upcoming assignments")
-        buttonUpcoming = tk.Button(self, text = "Upcoming Assignments", command = lambda:controller.printoutAssignments())
+        
         labelCourses.pack()
         buttonCourses.pack()
         labelGrades.pack()
         buttonGrades.pack()
         labelAnnouncements.pack()
         buttonAnnouncements.pack()
-        labelUpcoming.pack()
-        buttonUpcoming.pack()
+        
 
     
         #ideas is to be able be logged in and call an api using buttons 

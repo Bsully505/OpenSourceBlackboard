@@ -7,6 +7,7 @@ from LoggedInAPITester import LoggedInAPITester
 import json
 import os
 from dotenv import load_dotenv
+import html2text
 
 #Bryans UserID = _74932_1
 #the question that I(Bryan) have is how to get the courses faster
@@ -162,15 +163,14 @@ class mainApp(tk.Tk):
         #print(response.json()['name'] + " it worked!")
         for res in response.json()['results']:
             print(res['title'])
-            print(res['body'])
+            print(html2text.html2text(res['body']))
     
     def printoutGrades(self, CourseID):
-        url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/columns'
+        url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/users/'+self.userID
         response = requests.request("GET", url, headers = self.header)
         for res in response.json()['results']:
-            #print(res)
-            print(res['name'])
             print(res['score'])
+                
 
     def printoutAssignments(self):
         url = self.preUrl + '/learn/api/public/v1/calendars/items'
@@ -178,7 +178,8 @@ class mainApp(tk.Tk):
         for res in response.json()['results']:
             #print(res)
             print(res['title'])
-            print(res['end'])
+            print('Due date: ' + res['end'].split('T')[0])
+            print('Time due: ' + res['end'].split('T')[1][:-5])
 
     def getCoursesForThisSemester(self):
         courses = []
