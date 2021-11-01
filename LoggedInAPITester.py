@@ -14,7 +14,7 @@ class LoggedInAPITester(tk.Frame):
       
         for i in courses:
             print(i)
-            butt=ttk.Button(self,text = i.split(",")[1],command= lambda i=i:controller.ChangeFrame(i.split(",")[1]))
+            butt=ttk.Button(self,text = i.split(",")[1].split(" ",1)[1],command= lambda i=i:controller.ChangeFrame(i.split(",")[1]))
             controller.addCourseFrame(i.split(",")[1],i.split(",")[0],self.UserID)
             butt.pack()
 

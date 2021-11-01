@@ -8,6 +8,7 @@ import json
 import os
 from dotenv import load_dotenv
 import html2text
+from datetime import date
 
 #Bryans UserID = _74932_1
 #the question that I(Bryan) have is how to get the courses faster
@@ -45,6 +46,7 @@ class mainApp(tk.Tk):
     global username
     global password
     global userID
+    global term
     courses = []
     preUrl = 'https://quinnipiac.blackboard.com/'
     header = {
@@ -54,7 +56,8 @@ class mainApp(tk.Tk):
     global container
 
     def __init__(self, *args, **kwargs):
-        print(os.environ.get('Header'))
+        
+        self.term = self.DetermineTerm()
         
         tk.Tk.__init__(self, *args, **kwargs)
         self.container = tk.Frame(self)
@@ -101,7 +104,10 @@ class mainApp(tk.Tk):
         #self.printoutAssignments()
         self.getCoursesForThisSemester()
 
-
+    def DetermineTerm(self):
+        if(date.today().month>7):
+            return(str(date.today().year%100)+"FA")
+        return(str(date.today().year%100)+"SP")
 
     def ChangeFrame(self,page):
         try:
@@ -225,7 +231,7 @@ class mainApp(tk.Tk):
         res = response.json()
         for val in res['results']:
             result = val['course']['externalId'].split('_')
-            if(('21FA') in result[len(result)-1] ):
+            if((self.term) in result[len(result)-1] ):
                 courses.append(val['courseId']+','+val['course']['name'])
                 print(val['courseId'])
         return courses
