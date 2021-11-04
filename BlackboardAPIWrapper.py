@@ -31,3 +31,15 @@ class BlackboardAPIWrapper():
         url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users?userName='+self.username
         response = requests.request("GET",url,headers= self.header)
         return response.json()['results'][0]['id']
+
+    def getCoursesForThisSemester(self):
+        courses = []
+        url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users/'+self.getUserId()+'/courses?sort=lastAccessed(desc)&fields=courseId,course.externalId,course.name'
+        response = requests.request("GET",url,headers = self.header)
+        res = response.json()
+        for val in res['results']:
+            result = val['course']['externalId'].split('_')
+            if(self.DetermineTerm() in result[len(result)-1] ):
+                if(result is not None):
+                    courses.append(result[0])               
+        return courses
