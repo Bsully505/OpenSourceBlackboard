@@ -174,8 +174,23 @@ class mainApp(tk.Tk):
     def printoutGrades(self, CourseID):
         url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/users/'+self.userID
         response = requests.request("GET", url, headers = self.header)
-        for res in response.json()['results']:
-            print(res['score'])
+        list = response.json()['results']
+        # only works when every array in results has both columnId and score
+        #res = {list[i]['columnId']: list[i]['score'] for i in range(len(list))}
+        #c = map(None, list['columnId'], list['score'])
+        #print(response.json()['results'][0]['columnId'])
+        newlist = {}
+        for res in list:
+            try: 
+                print(res['columnId'])
+                print(res['score'])
+                newlist[res['columnId']] = res['score']
+                #print(res['columnId'])
+                #print(res['score'])
+            except KeyError:
+                print()
+        print (newlist)
+        
                 
 
     def printoutAssignments(self):
