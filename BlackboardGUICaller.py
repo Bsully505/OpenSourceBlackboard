@@ -9,6 +9,8 @@ import os
 from dotenv import load_dotenv
 import html2text
 from datetime import date
+import datetime
+import pytz
 
 #Bryans UserID = _74932_1
 #the question that I(Bryan) have is how to get the courses faster
@@ -199,8 +201,10 @@ class mainApp(tk.Tk):
         for res in response.json()['results']:
             #print(res)
             print(res['title'])
-            print('Due date: ' + res['end'].split('T')[0])
-            print('Time due: ' + res['end'].split('T')[1][:-5])
+            DueDate = str(self.ConvertTimeToEST(res['end'].split('T')[0],res['end'].split('T')[1][:-5]))
+            DueDate = DueDate.rsplit('-',1)[0]
+            print('DUE DATE: '+ DueDate)
+ 
 
     def getCoursesForThisSemester(self):
         courses = []
@@ -253,6 +257,21 @@ class mainApp(tk.Tk):
 
     def getUserID(self):
         return self.userID
+
+    def ConvertTimeToEST(self,date, time):
+        #time  is going to come in like 2021-11-15 and 04:59:00
+        dts =datetime.datetime.strptime(date+' '+time, '%Y-%m-%d %H:%M:%S')
+
+        local = datetime.datetime.astimezone(datetime.datetime.now())
+        
+        local_tz = local.tzinfo
+        local_tzname = local_tz.tzname(local)
+        users = pytz.timezone(local_tzname)
+        gmt = pytz.timezone('GMT')
+        dategmt = gmt.localize(dts)
+        
+        dateUser = dategmt.astimezone(users)
+        return dateUser
 
 
 if __name__ == "__main__":
