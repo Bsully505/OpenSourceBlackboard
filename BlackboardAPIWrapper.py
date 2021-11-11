@@ -12,6 +12,7 @@ class BlackboardAPIWrapper():
     global header
     global UserID
     global Term
+    preUrl = 'https://quinnipiac.blackboard.com/'
 
     def __init__(self,username, jsessionCookie ):
         self.username = username
@@ -43,3 +44,49 @@ class BlackboardAPIWrapper():
                 if(result is not None):
                     courses.append(result[0])               
         return courses
+
+
+    def GetCourseID(self):
+        url = "https://quinnipiac.blackboard.com/learn/api/public/v1/users/"+self.userID+"/courses"
+        response = requests.request("GET",url, headers = self.header)
+        #prints out the courses that the student is enrolled in 
+        courses={}
+        for res in response.json()['results']:
+            courses.append(str(res['courseId']))
+        return courses
+
+    def printoutGrades(self, CourseID):
+        url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/users/'+self.userID
+        response = requests.request("GET", url, headers = self.header)
+        list = response.json()['results']
+        # only works when every array in results has both columnId and score
+        #res = {list[i]['columnId']: list[i]['score'] for i in range(len(list))}
+        #c = map(None, list['columnId'], list['score'])
+        #print(response.json()['results'][0]['columnId'])
+       
+
+        Score = {}
+        for res in list:
+            try: 
+                Score[res['columnId']] = res['score']
+            except KeyError:
+                print()
+
+        SecondUrl = self.preUrl+'/learn/api/public/v1/courses/'+CourseID+'/gradebook/columns'
+        response = requests.request("GET", SecondUrl, headers = self.header)
+        secondList = response.json()['results']
+        Name = {}
+        Possible= {}
+        for res in secondList:
+            try:
+                if(Score[res['id']]):
+                    Name[res['id']] = res['name']
+                    Possible[res['id']]= res['score']['possible']
+            except KeyError:
+                print()
+        for colId in Score:
+            name = str(Name[colId])
+            score = str(Score[colId])
+            possible = str(Possible[colId])
+            print(name +': '+score+'/'+possible)
+       

@@ -11,6 +11,7 @@ import html2text
 from datetime import date
 import datetime
 import pytz
+import browsercookie
 
 #Bryans UserID = _74932_1
 #the question that I(Bryan) have is how to get the courses faster
@@ -181,17 +182,33 @@ class mainApp(tk.Tk):
         #res = {list[i]['columnId']: list[i]['score'] for i in range(len(list))}
         #c = map(None, list['columnId'], list['score'])
         #print(response.json()['results'][0]['columnId'])
-        newlist = {}
+       
+
+        Score = {}
         for res in list:
             try: 
-                print(res['columnId'])
-                print(res['score'])
-                newlist[res['columnId']] = res['score']
-                #print(res['columnId'])
-                #print(res['score'])
+                Score[res['columnId']] = res['score']
             except KeyError:
                 print()
-        print (newlist)
+
+        SecondUrl = self.preUrl+'/learn/api/public/v1/courses/_90279_1/gradebook/columns'
+        response = requests.request("GET", SecondUrl, headers = self.header)
+        secondList = response.json()['results']
+        Name = {}
+        Possible= {}
+        for res in secondList:
+            try:
+                if(Score[res['id']]):
+                    Name[res['id']] = res['name']
+                    Possible[res['id']]= res['score']['possible']
+            except KeyError:
+                print()
+        for colId in Score:
+            name = str(Name[colId])
+            score = str(Score[colId])
+            possible = str(Possible[colId])
+            print(name +': '+score+'/'+possible)
+       
         
                 
 
