@@ -99,12 +99,7 @@ class mainApp(tk.Tk):
         self.userID = self.getUserId(username)
         self.SetCourseIDInfo()
         self.AddCourseFrame(self.userID)
-        #self.printoutCourseIDs()
-        #self.PrintCourseNamesWithIds()
         self.ChangeFrame("LoggedInAPITester")
-        #self.printoutAnnouncements('_90503_1')
-        #self.printoutGrades('_90503_1')
-        #self.printoutAssignments()
         self.getCoursesForThisSemester()
 
     def DetermineTerm(self):
@@ -282,10 +277,12 @@ class mainApp(tk.Tk):
         local = datetime.datetime.astimezone(datetime.datetime.now())
         
         local_tz = local.tzinfo
+        print(local_tz)
         local_tzname = local_tz.tzname(local)
         users = pytz.timezone(local_tzname)
         gmt = pytz.timezone('GMT')
         dategmt = gmt.localize(dts)
+        print(local_tzname)
         
         dateUser = dategmt.astimezone(users)
         return dateUser
