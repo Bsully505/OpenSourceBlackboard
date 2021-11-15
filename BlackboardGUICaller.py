@@ -270,7 +270,17 @@ class mainApp(tk.Tk):
     def getUserID(self):
         return self.userID
 
-    def ConvertTimeToEST(self,date, time):
+    def getInitials(self, text):
+        list = text.split(" ")
+        res = ""
+        if len(list)>1:
+            for word in list:
+                res += word[0]
+            res = res.upper()
+            return res
+        return text
+    
+    def ConvertTimeToEST(self, date, time):
         #time  is going to come in like 2021-11-15 and 04:59:00
         dts =datetime.datetime.strptime(date+' '+time, '%Y-%m-%d %H:%M:%S')
 
@@ -279,7 +289,7 @@ class mainApp(tk.Tk):
         local_tz = local.tzinfo
         print(local_tz)
         local_tzname = local_tz.tzname(local)
-        users = pytz.timezone(local_tzname)
+        users = pytz.timezone(self.getInitials(local_tzname))
         gmt = pytz.timezone('GMT')
         dategmt = gmt.localize(dts)
         print(local_tzname)
