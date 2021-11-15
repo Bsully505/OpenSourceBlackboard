@@ -164,11 +164,24 @@ class mainApp(tk.Tk):
     def printoutAnnouncements(self,CourseID):
         url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/announcements'
         response = requests.request("GET", url, headers = self.header)
-        #print(response.json()['name'] + " it worked!")
         for res in response.json()['results']:
             print(res['title'])
             print(html2text.html2text(res['body']))
+
+    def changeAnnouncementsLabel(self, CourseID):
+        url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/announcements'
+        response = requests.request("GET", url, headers = self.header)
+        s = ""
+        for res in response.json()['results']:
+            s += res['title']
+            s += "\n"
+            s += html2text.html2text(res['body'])
+        return s
     
+    def changeAnnouncements(self, controller, CourseID):
+        fullAnnouncements = ttk.Label(self, text = controller.changeAnnouncementsLabel(CourseID))
+        fullAnnouncements.pack()
+
     def printoutGrades(self, CourseID):
         url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/users/'+self.userID
         response = requests.request("GET", url, headers = self.header)
@@ -207,15 +220,30 @@ class mainApp(tk.Tk):
         
                 
 
-    def printoutAssignments(self):
+    #def printoutAssignments(self):
+    #    url = self.preUrl + '/learn/api/public/v1/calendars/items'
+    #    response = requests.request("GET", url, headers = self.header)
+    #    for res in response.json()['results']:
+    #        print(res['title'])
+    #        DueDate = str(self.ConvertTimeToEST(res['end'].split('T')[0],res['end'].split('T')[1][:-5]))
+    #        DueDate = DueDate.rsplit('-',1)[0]
+    #        print('DUE DATE: '+ DueDate)
+
+    def changeAssignmentsLabel(self):
         url = self.preUrl + '/learn/api/public/v1/calendars/items'
         response = requests.request("GET", url, headers = self.header)
+        s = ""
         for res in response.json()['results']:
-            #print(res)
-            print(res['title'])
+            s += res['title']
             DueDate = str(self.ConvertTimeToEST(res['end'].split('T')[0],res['end'].split('T')[1][:-5]))
             DueDate = DueDate.rsplit('-',1)[0]
-            print('DUE DATE: '+ DueDate)
+            s += "\n"
+            s += "DUE DATE: " + DueDate + "\n"
+        return s
+    
+    def changeAssignments(self, controller):
+        fullAssignments = ttk.Label(self, text = controller.changeAssignmentsLabel())
+        fullAssignments.pack()
  
 
     def getCoursesForThisSemester(self):
@@ -287,12 +315,12 @@ class mainApp(tk.Tk):
         local = datetime.datetime.astimezone(datetime.datetime.now())
         
         local_tz = local.tzinfo
-        print(local_tz)
+        #print(local_tz)
         local_tzname = local_tz.tzname(local)
         users = pytz.timezone(self.getInitials(local_tzname))
         gmt = pytz.timezone('GMT')
         dategmt = gmt.localize(dts)
-        print(local_tzname)
+        #print(local_tzname)
         
         dateUser = dategmt.astimezone(users)
         return dateUser
