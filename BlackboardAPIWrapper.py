@@ -1,6 +1,8 @@
 import BlackboardGUICaller 
 from datetime import date
 import requests
+from SeleniumBlackBoard import Login
+
 
 
 
@@ -9,16 +11,24 @@ import requests
 class BlackboardAPIWrapper():
     global username
     global jsessionCookie
+    global password
     global header
     global UserID
     global Term
     preUrl = 'https://quinnipiac.blackboard.com/'
 
-    def __init__(self,username, jsessionCookie ):
+    def __init__(self,username, jsessionCookie, **kwargs):
         self.username = username
         self.jsessionCookie = jsessionCookie
+        if(kwargs.get('password')):
+            self.password = kwargs.get('password')
+            webController = Login(self.username+'@quinnipiac.edu',self.password)
+            self.jsessionCookie = webController.getJessionCookie()
+            print(self.jsessionCookie)
+            
+       
         self.header = {
-            'Cookie': jsessionCookie
+            'Cookie': self.jsessionCookie
             }
         
     #to determine the term for 
