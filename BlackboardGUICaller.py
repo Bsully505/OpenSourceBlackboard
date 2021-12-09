@@ -12,6 +12,7 @@ from datetime import date
 import datetime
 import pytz
 import browsercookie
+from SeleniumBlackBoard import Login
 
 #Bryans UserID = _74932_1
 #the question that I(Bryan) have is how to get the courses faster
@@ -36,7 +37,7 @@ import browsercookie
 ###
 #My Plan is when creating the LoggedInAPITester frame to insert the couseName, CourseID as a string and able to split with regex of ","
 
-
+#what I have to do is to wait for selenium to set the Bbrouter cookie and then 
 ###
 
 
@@ -57,7 +58,7 @@ class mainApp(tk.Tk):
     }
 
     global container
-
+    global driver
     def __init__(self, *args, **kwargs):
         
         self.term = self.DetermineTerm()
@@ -101,6 +102,21 @@ class mainApp(tk.Tk):
         self.AddCourseFrame(self.userID)
         self.ChangeFrame("LoggedInAPITester")
         self.getCoursesForThisSemester()
+        
+    def ValidateLoginWithSel(self,Username, Password):
+        username = Username
+        password = Password
+        if(len(password)>5):
+            self.driver = Login(username,password)
+            username = username.split('@')[0]
+            self.header['Cookie']= self.driver.getJessionCookie()
+        res = self.driver.RequestUrl('https://quinnipiac.blackboard.com/learn/api/public/v1/users?userName='+username)
+        self.userID = self.getUserId(username)
+        self.SetCourseIDInfo()
+        self.AddCourseFrame(self.userID)
+        self.ChangeFrame("LoggedInAPITester")
+        self.getCoursesForThisSemester()
+          
 
     def DetermineTerm(self):
         if(date.today().month>7):
@@ -118,9 +134,12 @@ class mainApp(tk.Tk):
 
 
     #not a function that is being used
-    def importHeader(self):
+    def importHeader(self,bbRouter):
         #example course id is _90767_1 this is for procedural generation
         #this would possibly be where selenium is used to capture the cookie of jsessionid
+        self.header = {
+            'Cookie': bbRouter
+        }
         print('get session cookie and set to header')
     
             

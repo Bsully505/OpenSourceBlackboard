@@ -6,6 +6,7 @@ class LoginPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        Sel = False
 
 
 
@@ -19,8 +20,10 @@ class LoginPage(tk.Frame):
         labelPass = ttk.Label(self, text = "Password: ")
 
         textPass = tk.Text(self,height = 1,width = 15)
-
-        Submit = tk.Button(self,text = "Submit", command =   lambda:controller.ValidateLogin(textUser.get(1.0,"end-1c"),textPass.get(1.0,"end-1c")))
+        if(Sel==True):
+            Submit = tk.Button(self,text = "Submit", command =   lambda:controller.ValidateLoginWithSel(textUser.get(1.0,"end-1c"),textPass.get(1.0,"end-1c")))
+        else:
+             Submit = tk.Button(self,text = "Submit", command =   lambda:controller.ValidateLogin(textUser.get(1.0,"end-1c"),textPass.get(1.0,"end-1c")))
         Submit.grid(row = 6, column = 4)
 
         labelUser.grid(row = 2, column = 2)
