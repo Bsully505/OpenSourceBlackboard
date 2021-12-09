@@ -197,26 +197,51 @@ class mainApp(tk.Tk):
             s += html2text.html2text(res['body'])
         return s
     
-    def changeAnnouncements(self, controller, CourseID, fullAnnouncements):
+    def changeAnnouncementsGUI(self, controller, CourseID, fullAnnouncements):
         fullAnnouncements.config(text = controller.changeAnnouncementsLabel(CourseID))
         return fullAnnouncements
 
-    def printoutGrades(self, CourseID):
+    # def printoutGrades(self, CourseID):
+    #     url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/users/'+self.userID
+    #     response = requests.request("GET", url, headers = self.header)
+    #     list = response.json()['results']
+    #     Score = {}
+    #     for res in list:
+    #         try: 
+    #             Score[res['columnId']] = res['score']
+    #         except KeyError:
+    #             pass
+
+    #     SecondUrl = self.preUrl+'/learn/api/public/v1/courses/' + CourseID + '/gradebook/columns'
+    #     response = requests.request("GET", SecondUrl, headers = self.header)
+    #     secondList = response.json()['results']
+    #     Name = {}
+    #     Possible= {}
+    #     for res in secondList:
+    #         try:
+    #             if(Score[res['id']]):
+    #                 Name[res['id']] = res['name']
+    #                 Possible[res['id']]= res['score']['possible']
+    #         except KeyError:
+    #             pass
+    #     for colId in Name:
+    #         name = str(Name[colId])
+    #         score = str(Score[colId])
+    #         possible = str(Possible[colId])
+    #         print(name +': '+score+'/'+possible)
+       
+        
+    def changeGradesLabel(self, CourseID):
         url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/users/'+self.userID
         response = requests.request("GET", url, headers = self.header)
+        s = ""
         list = response.json()['results']
-        # only works when every array in results has both columnId and score
-        #res = {list[i]['columnId']: list[i]['score'] for i in range(len(list))}
-        #c = map(None, list['columnId'], list['score'])
-        #print(response.json()['results'][0]['columnId'])
-       
-
         Score = {}
         for res in list:
             try: 
                 Score[res['columnId']] = res['score']
             except KeyError:
-                print()
+                pass
 
         SecondUrl = self.preUrl+'/learn/api/public/v1/courses/' + CourseID + '/gradebook/columns'
         response = requests.request("GET", SecondUrl, headers = self.header)
@@ -229,15 +254,20 @@ class mainApp(tk.Tk):
                     Name[res['id']] = res['name']
                     Possible[res['id']]= res['score']['possible']
             except KeyError:
-                print()
-        for colId in Score:
+                pass
+        for colId in Name:
             name = str(Name[colId])
             score = str(Score[colId])
             possible = str(Possible[colId])
-            print(name +': '+score+'/'+possible)
-       
-        
-                
+            s += (name +': '+score+'/'+possible)
+            s += "\n"
+
+        return s
+
+
+    def changeGradesGUI(self, controller, CourseID, fullGrades):
+        fullGrades.config(text = controller.changeGradesLabel(CourseID))
+        return fullGrades           
 
     #def printoutAssignments(self):
     #    url = self.preUrl + '/learn/api/public/v1/calendars/items'
@@ -260,7 +290,7 @@ class mainApp(tk.Tk):
             s += "DUE DATE: " + DueDate + "\n"
         return s
     
-    def changeAssignments(self, controller, fullAssignments):
+    def changeAssignmentsGUI(self, controller, fullAssignments):
         fullAssignments.config(text = controller.changeAssignmentsLabel())
         return fullAssignments
  

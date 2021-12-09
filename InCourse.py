@@ -13,9 +13,9 @@ class InCourse(tk.Frame):
         tk.Button(self,text = "Back",command=lambda:controller.ChangeFrame("LoggedInAPITester")).pack()
         
         labelGrades = ttk.Label(self, text = "Get list of grades")
-        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.printoutGrades(self.CourseID))
+        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.changeGradesGUI(controller, self.CourseID, labelDefault))
         labelAnnouncements = ttk.Label(self, text = "Get list of announcements")
-        buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.changeAnnouncements(controller, self.CourseID, labelDefault))
+        buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.changeAnnouncementsGUI(controller, self.CourseID, labelDefault))
         
         labelDefault = ttk.Label(self, text = "")
         

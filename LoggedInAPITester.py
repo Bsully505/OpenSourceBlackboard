@@ -21,7 +21,7 @@ class LoggedInAPITester(tk.Frame):
 
         def_lbl = tk.Label(self, text = "")
         def_lbl.pack()
-        buttonUpcoming = tk.Button(self, text = "Get List of Upcoming Assignments", command = lambda:controller.changeAssignments(controller, def_lbl))
+        buttonUpcoming = tk.Button(self, text = "Get List of Upcoming Assignments", command = lambda:controller.changeAssignmentsGUI(controller, def_lbl))
         buttonUpcoming.pack()
         #ideas is to be able be logged in and call an api using buttons 
         
