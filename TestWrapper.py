@@ -5,7 +5,7 @@ import os
 
 if __name__=="__main__":
     load_dotenv()
-    wrapper = BlackboardAPIWrapper('bcsullivan',os.getenv('Header'))
-    print(wrapper.getUserId())
-    print(wrapper.getCoursesForThisSemester())
+    wrapper = BlackboardAPIWrapper('bcsullivan',os.getenv('Header'),password= os.getenv('PWord'))
+    #print(wrapper.getUserId())
+    #print(wrapper.getCoursesForThisSemester())
     
