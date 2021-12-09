@@ -178,9 +178,9 @@ class mainApp(tk.Tk):
             s += html2text.html2text(res['body'])
         return s
     
-    def changeAnnouncements(self, controller, CourseID):
-        fullAnnouncements = ttk.Label(self, text = controller.changeAnnouncementsLabel(CourseID))
-        fullAnnouncements.pack()
+    def changeAnnouncements(self, controller, CourseID, fullAnnouncements):
+        fullAnnouncements.config(text = controller.changeAnnouncementsLabel(CourseID))
+        return fullAnnouncements
 
     def printoutGrades(self, CourseID):
         url = self.preUrl + '/learn/api/public/v1/courses/'+CourseID+'/gradebook/users/'+self.userID
@@ -199,7 +199,7 @@ class mainApp(tk.Tk):
             except KeyError:
                 print()
 
-        SecondUrl = self.preUrl+'/learn/api/public/v1/courses/_90279_1/gradebook/columns'
+        SecondUrl = self.preUrl+'/learn/api/public/v1/courses/' + CourseID + '/gradebook/columns'
         response = requests.request("GET", SecondUrl, headers = self.header)
         secondList = response.json()['results']
         Name = {}
@@ -241,9 +241,9 @@ class mainApp(tk.Tk):
             s += "DUE DATE: " + DueDate + "\n"
         return s
     
-    def changeAssignments(self, controller):
-        fullAssignments = ttk.Label(self, text = controller.changeAssignmentsLabel())
-        fullAssignments.pack()
+    def changeAssignments(self, controller, fullAssignments):
+        fullAssignments.config(text = controller.changeAssignmentsLabel())
+        return fullAssignments
  
 
     def getCoursesForThisSemester(self):

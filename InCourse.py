@@ -11,16 +11,19 @@ class InCourse(tk.Frame):
         self.CourseID = CourseID
         controller.geometry('250x450')
         tk.Button(self,text = "Back",command=lambda:controller.ChangeFrame("LoggedInAPITester")).pack()
-
+        
         labelGrades = ttk.Label(self, text = "Get list of grades")
-        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.changeAssignments(controller))
+        buttonGrades = tk.Button(self, text = "Grades", command = lambda:controller.printoutGrades(self.CourseID))
         labelAnnouncements = ttk.Label(self, text = "Get list of announcements")
-        buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.changeAnnouncements(controller, self.CourseID))
+        buttonAnnouncements = tk.Button(self, text = "Announcements", command = lambda:controller.changeAnnouncements(controller, self.CourseID, labelDefault))
+        
+        labelDefault = ttk.Label(self, text = "")
         
         labelGrades.pack()
         buttonGrades.pack()
         labelAnnouncements.pack()
         buttonAnnouncements.pack()
+        labelDefault.pack()
         #ideas is to be able be logged in and call an api using buttons 
     
     
