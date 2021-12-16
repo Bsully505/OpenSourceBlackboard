@@ -8,22 +8,17 @@ class LoginPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         Sel = False
 
-
-
-        #row is up and down an column is the left or right
-        #origin is top left
-
         labelUser = ttk.Label(self, text = "UserName: ")
 
-        textUser = tk.Text(self,height=1 ,width = 15)
+        textUser = tk.Entry(self ,width = 15)
 
         labelPass = ttk.Label(self, text = "Password: ")
 
-        textPass = tk.Text(self,height = 1,width = 15)
+        textPass = tk.Entry(self,width = 15,show = "*")
         if(Sel==True):
-            Submit = tk.Button(self,text = "Submit", command =   lambda:controller.ValidateLoginWithSel(textUser.get(1.0,"end-1c"),textPass.get(1.0,"end-1c")))
+            Submit = tk.Button(self,text = "Submit", command =   lambda:controller.ValidateLoginWithSel(textUser.get(),textPass.get()))
         else:
-             Submit = tk.Button(self,text = "Submit", command =   lambda:controller.ValidateLogin(textUser.get(1.0,"end-1c"),textPass.get(1.0,"end-1c")))
+             Submit = tk.Button(self,text = "Submit", command =   lambda:controller.ValidateLogin(textUser.get(),textPass.get()))
         Submit.grid(row = 6, column = 4)
 
         labelUser.grid(row = 2, column = 2)

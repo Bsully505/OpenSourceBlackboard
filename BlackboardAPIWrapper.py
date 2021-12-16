@@ -1,4 +1,3 @@
-import BlackboardGUICaller 
 from datetime import date
 import requests
 from SeleniumBlackBoard import Login

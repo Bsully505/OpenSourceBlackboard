@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import requests
+from BlackboardAPIWrapper import BlackboardAPIWrapper
 from InCourse import InCourse
 from LoginPage import LoginPage
 from LoggedInAPITester import LoggedInAPITester
@@ -107,6 +108,8 @@ class mainApp(tk.Tk):
         username = Username
         password = Password
         if(len(password)>5):
+            if('@' not in username):
+                username = username+'@quinnipiac.edu'
             self.driver = Login(username,password)
             username = username.split('@')[0]
             self.header['Cookie']= self.driver.getJessionCookie()
@@ -135,19 +138,16 @@ class mainApp(tk.Tk):
 
     #not a function that is being used
     def importHeader(self,bbRouter):
-        #example course id is _90767_1 this is for procedural generation
-        #this would possibly be where selenium is used to capture the cookie of jsessionid
         self.header = {
             'Cookie': bbRouter
         }
-        print('get session cookie and set to header')
+        
     
             
         #returns the userID of the username        
     def getUserId(self,username):
         url = 'https://quinnipiac.blackboard.com/learn/api/public/v1/users?userName='+username
         response = requests.request("GET",url,headers= self.header)
-        print(response.json())
         return response.json()['results'][0]['id']
 
     def SetCourseIDInfo(self):
@@ -156,8 +156,7 @@ class mainApp(tk.Tk):
         #prints out the courses that the student is enrolled in 
         for res in response.json()['results']:
             self.courses.append(str(res['courseId']))
-            #self.printoutCourseNameIndividual(res['courseId'])
-            #print()
+            
         
     
     def printoutCourseNameIndividual(self,courseId):
@@ -304,7 +303,7 @@ class mainApp(tk.Tk):
             result = val['course']['externalId'].split('_')
             if(('21FA') in result[len(result)-1] ):
                 courses.append(result[0])
-                print(result[0])
+                #print(result[0])
             
 
     #this does 
@@ -317,7 +316,7 @@ class mainApp(tk.Tk):
             result = val['course']['externalId'].split('_')
             if(('21FA') in result[len(result)-1] ):
                 courses.append(val['courseId'])
-                print(val['courseId'])
+                #print(val['courseId'])
         return courses
 
     def getCourseIdsForThisSemester(self,userID):
@@ -329,7 +328,7 @@ class mainApp(tk.Tk):
             result = val['course']['externalId'].split('_')
             if(('21FA') in result[len(result)-1] ):
                 courses.append(val['courseId'])
-                print(val['courseId'])
+                #print(val['courseId'])
         return courses
 
     def getCourseIdsandNamesForThisSemester(self,userID):
@@ -341,7 +340,7 @@ class mainApp(tk.Tk):
             result = val['course']['externalId'].split('_')
             if((self.term) in result[len(result)-1] ):
                 courses.append(val['courseId']+','+val['course']['name'])
-                print(val['courseId'])
+                #print(val['courseId'])
         return courses
 
     def getUserID(self):

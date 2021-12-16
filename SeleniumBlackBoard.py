@@ -25,7 +25,8 @@ class Login():
         
         #options makes it so that it stays open
         chrome_options = Options()
-        chrome_options.add_experimental_option("detach", True)
+        #chrome_options.add_experimental_option("detach", True)
+        chrome_options.add_argument("--headless")
 
         #the url that is going to allow selenium to login
         url = "https://quinnipiac.blackboard.com/"
@@ -33,9 +34,9 @@ class Login():
 
         self.driver = webdriver.Chrome('C:/Users/jacks/Downloads/chromedriver.exe',chrome_options=chrome_options)
 
-        #driver = webdriver.Chrome('C:/Users/jacks/Downloads/chromedriver.exe')# this is when you dont want to see the browser
+        #self.driver = webdriver.Chrome('C:/Users/jacks/Downloads/chromedriver.exe')# this is when you dont want to see the browser
 
-
+        #self.driver.
 
 
 
